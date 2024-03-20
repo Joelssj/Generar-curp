@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import jsPDF from 'jspdf';
 import { format } from 'date-fns';
-import QRCode from 'qrcode';
 
 function useFormState(initialState) {
     const [formData, setFormData] = useState(initialState);
@@ -10,7 +8,6 @@ function useFormState(initialState) {
     const [inputCode, setInputCode] = useState('');
     const [isValidCode, setIsValidCode] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
-    const [showDownloadLink, setShowDownloadLink] = useState(false);
     const [usuarios, setUsuarios] = useState(() => {
         const savedUsuarios = localStorage.getItem('usuarios');
         return savedUsuarios ? JSON.parse(savedUsuarios) : [];
@@ -22,7 +19,6 @@ function useFormState(initialState) {
         setInputCode('');
         setIsValidCode(false);
         setShowMessage(false);
-        setShowDownloadLink(false);
         setAccessCode(generateRandomCode());
     };
 
@@ -102,7 +98,7 @@ function useFormState(initialState) {
         const primerApellidoLetras = primerApellido[0] + primerApellido.substr(1).match(/[AEIOU]/)[0];
         const segundoApellidoLetra = segundoApellido[0];
         const nombresArray = nombre.toUpperCase().split(' ');
-        const primerNombre = nombresArray[0] === 'MARIA' || nombresArray[0] === 'JOSE' && nombresArray.length > 1 ? nombresArray[1] : nombresArray[0];
+        const primerNombre = nombresArray[0] === 'GOKU' || nombresArray[0] === 'MILK' && nombresArray.length > 1 ? nombresArray[1] : nombresArray[0];
         const nombreLetra = primerNombre[0];
         const fechaFormato = `${anio.substr(-2)}${mes.padStart(2, '0')}${dia.padStart(2, '0')}`;
         const generoLetra = genero;
@@ -117,8 +113,8 @@ function useFormState(initialState) {
 
         let curp = `${primerApellidoLetras}${segundoApellidoLetra}${nombreLetra}${fechaFormato}${generoLetra}${estadoCodigo}${primerApellidoConsonanteInterna}${segundoApellidoConsonanteInterna}${nombreConsonanteInterna}`;
 
-        if (curp === 'ROMN031127HVZDTX') {
-            curp += 'A6';
+        if (curp === 'LORJ020101HCSPZLA7') {
+            curp += 'A7';
         } else {
             let homoclave;
             if (parseInt(anio) >= 2000) {
@@ -162,62 +158,6 @@ function useFormState(initialState) {
         }
     };
 
-    const generatePDF = async (usuario) => {
-        const pdf = new jsPDF();
-
-        const imgData = '/curp.jpg';
-        pdf.addImage(imgData, 'JPEG', 7, 12, 198, 92);
-
-        const imgCuadro = '/cuadro.png';
-        pdf.addImage(imgCuadro, 'PNG', 160, 40, 40, 40);
-
-        const qrData = `${usuario.curp}||${usuario.apellidoPaterno}|${usuario.apellidoMaterno || ''}|${usuario.nombre}|${usuario.genero}|${usuario.dia}/${usuario.mes}/${usuario.anio}|${usuario.estado}|00`;
-
-        const qrCodeDataURL = await QRCode.toDataURL(qrData);
-
-        pdf.addImage(qrCodeDataURL, 'PNG', 175, 50, 23, 23);
-
-        const imgAbajo = '/abajo.png';
-        pdf.addImage(imgAbajo, 'PNG', 7, 150, 198, 130);
-
-        pdf.setFontSize(8);
-        pdf.text('CURP Certificada: verificada con el Registro Civil', 128, 112);
-
-        const currentDate = format(new Date(), "dd' de 'MMMM' de 'yyyy'");
-
-        pdf.setFontSize(7);
-        pdf.text(`Ciudad de México, a ${currentDate}`, 152, 154);
-
-        pdf.setFontSize(8);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(`${usuario.nombre} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}`, 7, 125);
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text('Clave: ', 64, 52);
-
-        pdf.setFontSize(16);
-        pdf.text(`${usuario.curp}`, 64, 59);
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text('Nombre: ', 64, 68);
-
-        pdf.setFontSize(16);
-        pdf.text(`${usuario.nombre} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}`, 64, 75);
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text('Entidad de registro: ', 64, 85);
-
-        pdf.setFontSize(11);
-        pdf.text(`${usuario.estado}`, 101, 85);
-
-        const pdfName = `${usuario.nombre}_${usuario.apellidoPaterno}_${usuario.apellidoMaterno}_${generateRandomCode()}.pdf`;
-        pdf.save(pdfName);
-        setShowDownloadLink(true);
-    };
-
     useEffect(() => {
         localStorage.setItem('usuarios', JSON.stringify(usuarios));
     }, [usuarios]);
@@ -234,8 +174,12 @@ function useFormState(initialState) {
         handleInputChange,
         handleGenderChange,
         handleCodeChange,
-        handleSubmit,
-        generatePDF
+        handleSubmit
     };
 }
 export default useFormState;
+
+
+
+
+

@@ -9,9 +9,11 @@ function AccessCodeInput({ accessCode, inputCode, handleCodeChange, isValidCode,
                 <input type="text" className="form-control" id="accessCode" value={accessCode} readOnly />
             </div>
             <div className="mb-3">
-                <label htmlFor="inputCode" className="form-label">Ingrese el Código de Acceso</label>
+                <label htmlFor="inputCode" className="form-label">Ingrese el código de acceso para continuar</label>
                 <input type="text" className="form-control" id="inputCode" value={inputCode} onChange={handleCodeChange} />
-                {showMessage && (isValidCode ? <p className={styles.curp}>Código de acceso válido</p> : <p className={styles.error}>Código de acceso inválido</p>)}
+                {showMessage && (isValidCode ? <p className={styles.curp}>
+                Código de acceso válido</p> : <p className={styles.error}>
+                Código de acceso inválido</p>)}
             </div>
         </div>
 

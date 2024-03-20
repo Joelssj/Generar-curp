@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import Swal from 'sweetalert2'
 import useFormState from './useFormState';
 import PersonalInfoForm from './personalInfoForm';
 import StateSelection from './stateSelection';
@@ -55,17 +56,15 @@ function GenerateCurpForm() {
         setUsuarios(updatedUsuarios);
         setShowModal(false);
     };
-
+    
     return (
-        <div className={styles.container}>
-            <nav className="navbar navbar-light bg-light">
-                <div className="container-fluid">
-                    <a className="navbar-brand">
-                        <img src="/spellbook.png" alt="" width="30" height="24" className="d-inline-block align-text-top" />
-                        NoeOnCURP
-                    </a>
-                </div>
-            </nav>
+<div>
+    <nav>
+        <div className="container-fluid">
+            <hr />
+            <div style={{ width: '200%', height: '2px', background: 'black' }}></div>
+        </div>
+    </nav>
             <div className={styles.container2}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <PersonalInfoForm
@@ -89,7 +88,8 @@ function GenerateCurpForm() {
 
                     <div className="d-flex justify-content-between">
                         <button type="button" className="btn btn-secondary" onClick={handleClearForm}>Limpiar</button>
-                        <button type="submit" className="btn btn-primary">Generar</button>
+                        <button type="submit" className="btn btn-primary" >Generar CURP</button>
+
                     </div>
                 </form>
             </div>
@@ -105,7 +105,6 @@ function GenerateCurpForm() {
                             <th>Género</th>
                             <th>Estado</th>
                             <th>CURP</th>
-                            <th>Descargar PDF</th>
                             <th>Eliminar</th>
                         </tr>
                     </thead>
@@ -120,14 +119,10 @@ function GenerateCurpForm() {
                                 <td>{usuario.estado}</td>
                                 <td>{usuario.curp}</td>
                                 <td>
-                                    <button onClick={() => generatePDF(usuario)}>
-                                        <FontAwesomeIcon icon={faDownload} />
-                                    </button>
-                                </td>
-                                <td>
-                                    <button onClick={() => { setRowIndexToDelete(index); setShowModal(true); }}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </button>
+                                <button onClick={() => { setRowIndexToDelete(index); setShowModal(true); }}>
+                                Eliminar <FontAwesomeIcon icon={faTrash} />
+                                </button>
+
                                 </td>
                             </tr>
                         ))}
